@@ -3,13 +3,11 @@
 
 #include <stdio.h>
 #include <cstdint>
+#include <algorithm>
 
 #ifdef EMSCRIPTEN
     #include <emscripten/emscripten.h>
 #endif
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 450
 
 typedef struct {
     Vector2 pos;
@@ -17,9 +15,7 @@ typedef struct {
     float radius;
 } Ball;
 
-const Vector2 G = { 0, 200.0 }; // coordinate swap
-
-
+const Vector2 G = { 0, 0.45 };
 
 void step(void* voidBall) {
     Ball* ball = static_cast<Ball*>(voidBall);
@@ -27,6 +23,7 @@ void step(void* voidBall) {
     // constants for the frame
     const int W = GetScreenWidth();
     const int H = GetScreenHeight();
+    const int min = std::min(H, W);
 
     // simulate 3 steps
     const float dt = GetFrameTime() / 3.0;
@@ -39,13 +36,13 @@ void step(void* voidBall) {
         if (ball->pos.x < 0.0) {
             ball->pos.x = 0.0;
             ball->velocity.x = -ball->velocity.x;
-        } else if (ball->pos.x >= W) {
-            ball->pos.x = W;
+        } else if (ball->pos.x >= 1) {
+            ball->pos.x = 1;
             ball->velocity.x = -ball->velocity.x;
         }
 
-        if (ball->pos.y >= H) {
-            ball->pos.y = H;
+        if (ball->pos.y >= 1) {
+            ball->pos.y = 1;
             ball->velocity.y = -ball->velocity.y;
         }
     }
@@ -53,31 +50,30 @@ void step(void* voidBall) {
     // Draw
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    DrawCircleV(ball->pos, ball->radius, RED);
+    DrawCircleV(Vector2Multiply(ball->pos, {(float) W, (float) H}), ball->radius*min, RED);
     EndDrawing();
 }
 
 int main(void) {
     Ball ball = { 
         {
-            (float) GetScreenWidth() / 2, 
-            (float) GetScreenHeight() / 2
+            0.5f, 
+            0.5f
         }, 
         {
-            20.0f + ((float)(rand()) / (float)(RAND_MAX)) * 50.0f,
-            30.0f + ((float)(rand()) / (float)(RAND_MAX)) * 50.0f
+            0.25f + ((float)(rand()) / (float)(RAND_MAX)) / 5,
+            0.1f + ((float)(rand()) / (float)(RAND_MAX)) /5
         }, 
-        10 
+        0.02f
     };
 
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Frictionless Bouncing Ball");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(720, 480, "Frictionless Bouncing Ball");
     SetTargetFPS(60);
 
 #ifdef EMSCRIPTEN
-    printf("Web version\n");
     emscripten_set_main_loop_arg(step, static_cast<void*>(&ball), 60, 1);
 #else
-    printf("Not web\n");
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         step(static_cast<void*>(&ball));

@@ -15,3 +15,7 @@ TBD
 clang main.cpp -I include/ -L lib/ -lraylib -std=c++17
 ./a.out
 ```
+
+curl -sL \
+https://github.com/raysan5/raylib/releases/download/5.0/raylib-5.0_webassembly.zip \
+| bsdtar -x -C .

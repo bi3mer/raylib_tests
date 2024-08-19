@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang = "en">
+	<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://bootswatch.com/4/slate/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="icon" href="https://vignette1.wikia.nocookie.net/harrypotter/images/2/23/Hallows.png/revision/latest?cb=20090309113642">		
+    <title>Colan Biemer: Playing with Raylib</title>
+	</head>
+	<body>
+    <br/>
+    <center>
+      <h1>
+        Playing with Raylib
+      </h1>
+    </center>
+    <div class="container">
+
+      <!-- Generated content goes here -->
+      {{}}
+
+      <h3>Getting Started</h3>
+      <p>
+        Hello world
+      </p>
+    </div>
+	</body>
+</html>

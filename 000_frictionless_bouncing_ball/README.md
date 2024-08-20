@@ -6,7 +6,7 @@
 
 </center>
 
-This is a simple implementation of a single bouncing ball in raylib with c++. It can run locally or on [your browser](https://bi3mer.github.io/raylib_tests/000_ball_physics/). You can press `space` to pause.
+This is a simple implementation of a single bouncing ball in raylib with c++. It can run locally or on [your browser](https://bi3mer.github.io/raylib_tests/000_frictionless_bouncing_ball/). You can press `space` to pause.
 
 ## Running
 

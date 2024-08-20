@@ -12,7 +12,7 @@ TBD
 ### Compile
 
 ```bash
-clang main.cpp -I include/ -L lib/ -lraylib -std=c++17
+clang main.cpp -I include/  -lraylib -std=c++17
 ./a.out
 ```
 

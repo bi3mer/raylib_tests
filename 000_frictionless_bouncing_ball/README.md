@@ -46,6 +46,6 @@ Now open your browser and set the url to `127.0.0.1:8000`, and you should see a 
 
 ## Sources
 
-- [Youtube: 01 - Writing a physics simulation in 10 minutes](https://www.youtube.com/watch?v=oPuSvdBGrpE&feature=youtu.be)
-- [raylib bouncing balls examples](https://github.com/raysan5/raylib/blob/master/examples/shapes/shapes_bouncing_ball.c)
+- [YouTube: 01 - Writing a physics simulation in 10 minutes](https://www.youtube.com/watch?v=oPuSvdBGrpE&feature=youtu.be)
+- [Bouncing balls examples](https://github.com/raysan5/raylib/blob/master/examples/shapes/shapes_bouncing_ball.c)
 - [Native code in the browser with Emscripten](https://gioarc.me/posts/games/wasm.html)

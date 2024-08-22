@@ -94,7 +94,7 @@ int main(void) {
     SetTargetFPS(60);
 
 #ifdef EMSCRIPTEN
-    emscripten_set_main_loop_arg(step, static_cast<void*>(&state), 60, 1);
+    emscripten_set_main_loop_arg(step, static_cast<void*>(&state), 0, 1);
 #else
     SetTargetFPS(60);
     while (!WindowShouldClose()) {

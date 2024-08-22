@@ -6,7 +6,7 @@ This repo has a bunch of tests and experiments with [raylib](https://www.raylib.
 
 ### Simulations
 
-- Conway's game of life
+- Mouse press to add ball that bounces with collisions
 - Boids
 - Falling sand
 - Hilbert Curves

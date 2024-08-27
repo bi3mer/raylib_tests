@@ -69,7 +69,6 @@ public:
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-
         const float start_x = W * START;
         const float x_mod = (W*END - start_x) / (float) size;
 

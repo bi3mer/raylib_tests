@@ -7,18 +7,19 @@ This repo has a bunch of tests and experiments with [raylib](https://www.raylib.
 - Simulations
     - [Frictionless bouncing ball](https://bi3mer.github.io/raylib_tests/000_frictionless_bouncing_ball/)
     - [Conway's Game of Life](https://bi3mer.github.io/raylib_tests/001_conways_game_of_life/)
+    - [Hilbert Curves](https://bi3mer.github.io/raylib_tests/002_hilbert_curves/)
 
 ## Ideas
 
 ### Simulations
 
+- N-body
 - Mouse press to add ball that bounces with collisions
 - [Procedurally animated fish](https://www.youtube.com/watch?v=qlfh_rv6khY)
 - Boids (use the fish from above)
 - Falling sand
 - Hilbert Curves
 - Ant Colony
-- N-body
 
 ### Games
 

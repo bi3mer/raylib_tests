@@ -11,3 +11,4 @@ This is a simple visualization of [Hilbert Curves](https://en.wikipedia.org/wiki
 ## Sources
 
 - [Hilbert Curves](https://en.wikipedia.org/wiki/Hilbert_curve)
+- [C3 Hilbert Curve](https://thecodingtrain.com/challenges/c3-hilbert-curve)

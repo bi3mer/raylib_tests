@@ -9,7 +9,12 @@ This repo has a bunch of tests and experiments with [raylib](https://www.raylib.
     - [Conway's Game of Life](https://bi3mer.github.io/raylib_tests/001_conways_game_of_life/)
     - [Hilbert Curves](https://bi3mer.github.io/raylib_tests/002_hilbert_curves/)
 
+- Games
+    - [Pong](https://bi3mer.github.io/raylib_tests/003_pong/)
+
 ## Ideas
+
+Turn this into one big application. Use [raygui](https://github.com/raysan5/raygui) to help select different projects.
 
 ### Simulations
 
@@ -30,6 +35,9 @@ This repo has a bunch of tests and experiments with [raylib](https://www.raylib.
 - Asteroids
 - Frogger
 - Doodle jump
+- Brick Breaker
+- Sokobon
+- Micro Tower Defense
 
 ## Running the Code
 

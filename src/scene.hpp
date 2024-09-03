@@ -11,29 +11,11 @@
 // Scene is a node in a graph with outgoing edges.
 class Scene {
 public:
-    void on_enter() {
-        throw std::logic_error("`on_enter` not implemented");
-    }
-
-    void on_exit() {
-        throw std::logic_error("`on_exit` not implemented");
-    }
-
-    void update(float dt) {
-        throw std::logic_error("`update` not implemented");
-    }
-
-    void physics_update(float dt) {
-        throw std::logic_error("`physics_update` not implemented");
-    }
-
-    void draw() {
-        throw std::logic_error("`draw` not implemented");
-    }
-
-    Scene* change_scene() {
-        throw std::logic_error("`change_scene` not implemented");
-    }
+    virtual void on_enter() = 0;
+    virtual void on_exit() = 0;
+    virtual void update(float dt) = 0;
+    virtual void draw() = 0;
+    virtual Scene* change_scene() = 0;
 
     void add_dst_scene(Scene* scene) {
         #ifdef DEBUG

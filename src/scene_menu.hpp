@@ -5,6 +5,9 @@
 
 class SceneMenu : public Scene {
 public: 
+    void on_enter();
+    void on_exit();
+    void update(float dt);
     void draw();
     Scene* change_scene();
 

@@ -2,6 +2,18 @@
 #include "raylib.h"
 #include "raygui.h"
 
+void SceneMenu::on_enter() {
+    // do nothing
+}
+
+void SceneMenu::on_exit() {
+    // do nothing
+}
+
+void SceneMenu::update(float dt) {
+    // do nothing
+}
+
 void SceneMenu::draw() {
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 
@@ -17,4 +29,8 @@ void SceneMenu::draw() {
             showMessageBox = false;
         }
     }
-};
+}
+
+Scene* SceneMenu::change_scene() {
+    return nullptr;
+}

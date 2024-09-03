@@ -8,17 +8,27 @@
 #include "scene_menu.hpp"
 
 int main() {
-    InitWindow(1080, 720, "Hilbert Curves");
+    InitWindow(1080, 720, "raylib Tests");
     SetTargetFPS(60);
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
+    Scene* scene;
     SceneMenu menu;
 
-    bool showMessageBox = false;
+    scene = &menu;
 
     while (!WindowShouldClose()) {
+        Scene* new_scene = scene->change_scene();
+        if (new_scene != nullptr) {
+            scene->on_exit();
+            new_scene->on_enter();
+            scene = new_scene;
+        }
+
+        scene->update(GetFrameTime());
+
         BeginDrawing();
-        menu.draw();
+        scene->draw();
         EndDrawing();
     }
 

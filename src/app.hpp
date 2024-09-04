@@ -2,16 +2,16 @@
 #define __SCENE_MENU_HPP__
 
 #include "scene.hpp"
+#include "raylib.h"
 
-class SceneMenu : public Scene {
+class App {
 public: 
-    void on_enter();
-    void on_exit();
+    App();
     void update(float dt);
     void draw();
-    Scene* change_scene();
-
 private:
-    bool showMessageBox = false;
+    Scene* scene;
+    bool showMessageBox;
+    Vector2 titleDimensions;
 };
 #endif

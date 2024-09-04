@@ -5,12 +5,29 @@
 
 #define DEBUG true
 
-#include "scene_menu.hpp"
+#include "app.hpp"
+#include "scene_000_frictionless_ball.hpp"
 
 int main() {
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(1080, 720, "raylib Tests");
     SetTargetFPS(60);
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
+    App app;
+    while (!WindowShouldClose()) {
+        app.update(GetFrameTime());
+        
+        BeginDrawing();
+        app.draw();
+        EndDrawing();
+    }
+
+    CloseWindow();
+    return 0;
+}
+
+/** 
+ * Ideal state machine usage:
 
     Scene* scene;
     SceneMenu menu;
@@ -32,6 +49,4 @@ int main() {
         EndDrawing();
     }
 
-    CloseWindow();
-    return 0;
-}
+ */

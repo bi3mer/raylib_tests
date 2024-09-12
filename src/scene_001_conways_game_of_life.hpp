@@ -1,24 +1,24 @@
-// #ifndef SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
-// #define SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
+#ifndef SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
+#define SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
 
-// #include <algorithm>
-// #include "raylib.h"
-// #include "raymath.h"
-// #include "scene.hpp"
+#include <algorithm>
+#include "raylib.h"
+#include "raymath.h"
 
-// class SceneConwaysGame : public IScene {
-// public: 
-//     SceneConwaysGame();
-//     virtual ~SceneConwaysGame();
+#include "scene.hpp"
+#include "Conway.hpp"
 
-//     virtual void on_enter();
-//     virtual void on_exit();
-//     virtual void update(float dt);
-//     virtual void draw();
+class SceneConwaysGame : public IScene {
+public: 
+    SceneConwaysGame();
+    ~SceneConwaysGame();
 
-// private:
-//     bool state1[size][size];
-//     bool state2[size][size];
-//     bool useState1;
-// };
-// #endif
+    virtual void on_enter();
+    virtual void on_exit();
+    virtual void update(float dt);
+    virtual void draw();
+
+private:
+    Conway<100> conway;
+};
+#endif

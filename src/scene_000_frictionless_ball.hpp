@@ -15,7 +15,7 @@ typedef struct Ball {
 class SceneFrictionlessBall : public IScene {
 public: 
     SceneFrictionlessBall();
-    virtual ~SceneFrictionlessBall();
+    ~SceneFrictionlessBall();
 
     virtual void on_enter();
     virtual void on_exit();

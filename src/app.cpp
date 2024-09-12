@@ -5,6 +5,7 @@ App::App() {
     this->titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
 
     this->sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
+    this->sceneFactories[1] = new SceneFactory<SceneConwaysGame>((char*) "Conway's Game of Life");
 }
 
 App::~App() {
@@ -54,11 +55,4 @@ void App::draw() {
         
         y += 100; 
     }
-    // for (int s = SceneType::FRICTIONLESS_BALL; s < SceneType::LAST; ++s) {
-    //     SceneType scene = (SceneType) s;
-    //     if (GuiButton((Rectangle) {100, y, 150, 40}, sceneTypeToString(scene))) {
-    //         this->scene = sceneTypeToScene(scene);
-    //     }
-    //     y += 100;
-    // }
 }

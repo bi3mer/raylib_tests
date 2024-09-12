@@ -7,7 +7,8 @@
 #include "scene.hpp"
 #include "scene_000_frictionless_ball.hpp"
 
-#include "scene_type.hpp"
+#include "ISceneFactory.hpp"
+#include "SceneFactory.hpp"
 
 class App {
 public: 
@@ -15,9 +16,9 @@ public:
     ~App();
     void update(float);
     void draw();
-    void set_scene(SceneType);
 private:
     IScene* scene;
     Vector2 titleDimensions;
+    ISceneFactory* sceneFactories[1];
 };
 #endif

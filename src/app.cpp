@@ -3,11 +3,17 @@
 App::App() {
     this->scene = nullptr;
     this->titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
+
+    this->sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
 }
 
 App::~App() {
     if (this->scene == nullptr) {
         delete this->scene;
+    }
+
+    for (ISceneFactory* sf : this->sceneFactories) {
+        delete sf;
     }
 }
 
@@ -41,18 +47,18 @@ void App::draw() {
     DrawText("Raylib Tests", (W - this->titleDimensions.x) / 2, (H - this->titleDimensions.y) * 0.1f, 32, BLACK);
     
     float y = 100;
-    for (int s = SceneType::FRICTIONLESS_BALL; s < SceneType::LAST; ++s) {
-        SceneType scene = (SceneType) s;
-        if (GuiButton((Rectangle) {100, y, 150, 40}, sceneTypeToString(scene))) {
-            this->scene = sceneTypeToScene(scene);
+    for (const ISceneFactory* sf : this->sceneFactories) {
+        if (GuiButton((Rectangle) {100, y, 150, 40}, sf->getName())) {
+            this->scene = sf->constructScene();
         }
-        y += 100;
+        
+        y += 100; 
     }
-}
-
-void App::set_scene(SceneType scene) {
-    #if DEBUG
-    assert(scene != nullptr);
-    #endif
-
+    // for (int s = SceneType::FRICTIONLESS_BALL; s < SceneType::LAST; ++s) {
+    //     SceneType scene = (SceneType) s;
+    //     if (GuiButton((Rectangle) {100, y, 150, 40}, sceneTypeToString(scene))) {
+    //         this->scene = sceneTypeToScene(scene);
+    //     }
+    //     y += 100;
+    // }
 }

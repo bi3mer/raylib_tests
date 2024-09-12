@@ -1,7 +1,7 @@
 wasm:
 	emcc \
 		src/*.cpp \
-		-I ./src/*.hpp \
+		-I ./src/ \
 		-I ../../dependencies/raylib-5.0_webassembly/include \
 		-L ../../dependencies/raylib-5.0_webassembly/lib \
 		-lraylib \

@@ -1,17 +1,14 @@
-#include "raylib.h"
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #define DEBUG true
 
+#include "raylib.h"
 #include "app.hpp"
-#include "scene_000_frictionless_ball.hpp"
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(1080, 720, "raylib Tests");
     SetTargetFPS(60);
+
+    SetExitKey(KEY_NULL); // don't close on escape key or any other key
 
     App app;
     while (!WindowShouldClose()) {
@@ -25,28 +22,3 @@ int main() {
     CloseWindow();
     return 0;
 }
-
-/** 
- * Ideal state machine usage:
-
-    Scene* scene;
-    SceneMenu menu;
-
-    scene = &menu;
-
-    while (!WindowShouldClose()) {
-        Scene* new_scene = scene->change_scene();
-        if (new_scene != nullptr) {
-            scene->on_exit();
-            new_scene->on_enter();
-            scene = new_scene;
-        }
-
-        scene->update(GetFrameTime());
-
-        BeginDrawing();
-        scene->draw();
-        EndDrawing();
-    }
-
- */

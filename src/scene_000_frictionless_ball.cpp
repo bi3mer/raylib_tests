@@ -12,6 +12,10 @@ SceneFrictionlessBall::SceneFrictionlessBall() {
     };
 }
 
+SceneFrictionlessBall::~SceneFrictionlessBall() {
+    // do nothing
+}
+
 void SceneFrictionlessBall::on_enter() {
     // do nothing
 }
@@ -23,6 +27,12 @@ void SceneFrictionlessBall::on_exit() {
 void SceneFrictionlessBall::update(float dt) {
     if (IsKeyPressed(KEY_SPACE)) {
         this->pause = !this->pause;
+        return;
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        this->changeScene = true;
+        return;
     }
 
     if (!this->pause) {
@@ -53,20 +63,16 @@ void SceneFrictionlessBall::update(float dt) {
 void SceneFrictionlessBall::draw() {
     const int W = GetScreenWidth();
     const int H = GetScreenHeight();
-    const int min = std::min(H, W);
+    const int min = std::min(H, W); 
 
     ClearBackground(RAYWHITE);
     DrawCircleV(Vector2Multiply(ball.pos, {(float) W, (float) H}), ball.radius*min, RED);
 
-    DrawText("Press space to pause and unpause.", 10, 10, 20, GRAY);
+    DrawText("Press escape to go back.", 10, 10, 20, GRAY);
+    DrawText("Press space to pause and unpause.", 10, 30, 20, GRAY);
 
     if (this->pause) {
         Vector2 dimension = MeasureTextEx(GetFontDefault(), "PAUSED", 50, 1);
         DrawText("PAUSED", (W - dimension.x) / 2, (H- dimension.y) / 2, 50, GRAY);
     }
-}
-
-
-Scene* SceneFrictionlessBall::change_scene() {
-    return nullptr;
 }

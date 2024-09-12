@@ -1,33 +1,15 @@
 #ifndef __SCENE_HPP__
 #define __SCENE_HPP__
 
-#ifdef DEBUG
-#include <cassert>
-#endif
-
-#include <stdexcept>
-#include <vector>
-
-// Scene is a node in a graph with outgoing edges.
-class Scene {
+class IScene {
 public:
-    virtual void on_enter() = 0;
-    virtual void on_exit() = 0;
-    virtual void update(float dt) = 0;
-    virtual void draw() = 0;
-    virtual Scene* change_scene() = 0;
+    bool changeScene = false;
 
-    void add_dst_scene(Scene* scene) {
-        #ifdef DEBUG
-        printf("Checking scene...\n");
-        for (auto* s : this->dst_scenes) {
-            assert(s != scene);
-        }
-        #endif
+    virtual inline ~IScene() = default;
 
-        dst_scenes.push_back(scene);
-    }
-protected:
-    std::vector<Scene*> dst_scenes;
+    virtual inline void on_enter() = 0;
+    virtual inline void on_exit() = 0;
+    virtual inline void update(float dt) = 0;
+    virtual inline void draw() = 0;
 };
 #endif

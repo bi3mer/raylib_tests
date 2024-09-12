@@ -1,6 +1,7 @@
 #ifndef __SCENE_000_FRICTIONLESS_BALL_HPP__
 #define __SCENE_000_FRICTIONLESS_BALL_HPP__
 
+#include <algorithm>
 #include "raylib.h"
 #include "raymath.h"
 #include "scene.hpp"
@@ -11,15 +12,15 @@ typedef struct Ball {
     float radius;
 } Ball;
 
-class SceneFrictionlessBall : public Scene {
+class SceneFrictionlessBall : public IScene {
 public: 
     SceneFrictionlessBall();
+    virtual ~SceneFrictionlessBall();
 
     virtual void on_enter();
     virtual void on_exit();
     virtual void update(float dt);
     virtual void draw();
-    virtual Scene* change_scene();
 
 private:
     bool pause;

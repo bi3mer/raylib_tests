@@ -1,17 +1,23 @@
-#ifndef __SCENE_MENU_HPP__
-#define __SCENE_MENU_HPP__
+#ifndef __APP_HPP__
+#define __APP_HPP__
+
+#include "raylib.h"
+#include "raygui.hpp"
 
 #include "scene.hpp"
-#include "raylib.h"
+#include "scene_000_frictionless_ball.hpp"
+
+#include "scene_type.hpp"
 
 class App {
 public: 
     App();
-    void update(float dt);
+    ~App();
+    void update(float);
     void draw();
+    void set_scene(SceneType);
 private:
-    Scene* scene;
-    bool showMessageBox;
+    IScene* scene;
     Vector2 titleDimensions;
 };
 #endif

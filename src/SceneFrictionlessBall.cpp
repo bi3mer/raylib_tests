@@ -1,4 +1,4 @@
-#include "scene_000_frictionless_ball.hpp"
+#include "SceneFrictionlessBall.hpp"
 
 SceneFrictionlessBall::SceneFrictionlessBall() {
     this->pause = false;

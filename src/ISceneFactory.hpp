@@ -1,7 +1,7 @@
 #ifndef I_SCENE_FACTORY_HPP
 #define I_SCENE_FACTORY_HPP
 
-#include "scene.hpp"
+#include "IScene.hpp"
 
 class ISceneFactory {
 public:

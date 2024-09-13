@@ -1,11 +1,11 @@
-#ifndef SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
-#define SCENE_001_CONWAYS_GAME_OF_LIFE_HPP
+#ifndef SCENE_CONWAYS_GAME_OF_LIFE_HPP
+#define SCENE_CONWAYS_GAME_OF_LIFE_HPP
 
 #include <algorithm>
 #include "raylib.h"
 #include "raymath.h"
 
-#include "scene.hpp"
+#include "IScene.hpp"
 #include "Conway.hpp"
 
 class SceneConwaysGame : public IScene {

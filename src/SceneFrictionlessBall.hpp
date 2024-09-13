@@ -1,10 +1,10 @@
-#ifndef __SCENE_000_FRICTIONLESS_BALL_HPP__
-#define __SCENE_000_FRICTIONLESS_BALL_HPP__
+#ifndef SCENE_FRICTIONLESS_BALL_HPP
+#define SCENE_FRICTIONLESS_BALL_HPP
 
 #include <algorithm>
 #include "raylib.h"
 #include "raymath.h"
-#include "scene.hpp"
+#include "IScene.hpp"
 
 typedef struct Ball {
     Vector2 pos;

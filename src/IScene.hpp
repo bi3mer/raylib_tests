@@ -1,5 +1,5 @@
-#ifndef __SCENE_HPP__
-#define __SCENE_HPP__
+#ifndef I_SCENE_HPP
+#define I_SCENE_HPP
 
 class IScene {
 public:

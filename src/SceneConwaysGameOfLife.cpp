@@ -1,6 +1,4 @@
-
-
-#include "scene_001_conways_game_of_life.hpp"
+#include "SceneConwaysGameOfLife.hpp"
 
 SceneConwaysGame::SceneConwaysGame() {
     time = 0;

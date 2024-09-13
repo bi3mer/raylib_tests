@@ -4,9 +4,10 @@
 #include "raylib.h"
 #include "raygui.hpp"
 
-#include "scene.hpp"
-#include "scene_000_frictionless_ball.hpp"
-#include "scene_001_conways_game_of_life.hpp"
+#include "IScene.hpp"
+#include "SceneFrictionlessBall.hpp"
+#include "SceneConwaysGameOfLife.hpp"
+#include "SceneHilbertCurves.hpp"
 
 #include "ISceneFactory.hpp"
 #include "SceneFactory.hpp"
@@ -22,6 +23,6 @@ public:
 private:
     IScene* scene;
     Vector2 titleDimensions;
-    ISceneFactory* sceneFactories[2];
+    ISceneFactory* sceneFactories[3];
 };
 #endif

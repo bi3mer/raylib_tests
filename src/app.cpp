@@ -7,6 +7,7 @@ App::App() {
 
     sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
     sceneFactories[1] = new SceneFactory<SceneConwaysGame>((char*) "Conway's Game of Life");
+    sceneFactories[2] = new SceneFactory<SceneHilbertCurves>((char*) "Hilbert Curves");
 }
 
 App::~App() {
@@ -14,7 +15,7 @@ App::~App() {
         delete scene;
     }
 
-    for (ISceneFactory* sf : sceneFactories) {
+    for (const ISceneFactory* sf : sceneFactories) {
         delete sf;
     }
 }

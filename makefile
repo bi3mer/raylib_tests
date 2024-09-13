@@ -2,8 +2,8 @@ wasm:
 	emcc \
 		src/*.cpp \
 		-I ./src/ \
-		-I ../../dependencies/raylib-5.0_webassembly/include \
-		-L ../../dependencies/raylib-5.0_webassembly/lib \
+		-I ../dependencies/raylib-5.0_webassembly/include \
+		-L ../dependencies/raylib-5.0_webassembly/lib \
 		-lraylib \
 		-lm \
 		-s USE_GLFW=3 \

@@ -20,5 +20,6 @@ public:
 
 private:
     Conway<100> conway;
+    float time;
 };
 #endif

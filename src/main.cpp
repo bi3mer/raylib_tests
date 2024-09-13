@@ -11,7 +11,7 @@ int main() {
     SetExitKey(KEY_NULL); // don't close on escape key or any other key
 
     App app;
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && app.isRunning) {
         app.update(GetFrameTime());
         
         BeginDrawing();

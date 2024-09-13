@@ -6,7 +6,7 @@
 
 const std::pair<int, int> NEIGHBORS[] = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
 
-template <std::size_t size>
+template <std::size_t N>
 class Conway {
 public:
     Conway() {
@@ -15,51 +15,44 @@ public:
         generator.seed(time(NULL));
         std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
-        for (std::size_t y = 0; y < size; ++y) {
-            for (std::size_t x = 0; x < size; ++x) {
-                this->state1[y][x] = distribution(generator) >= 0.5f;
+        for (std::size_t y = 0; y < N; ++y) {
+            for (std::size_t x = 0; x < N; ++x) {
+                curState[y][x] = distribution(generator) >= 0.5f;
             }
         }
-
-        // simple class variables
-        this->useState1 = true;
     };
 
     void step() {
-        const auto& currentState = this->useState1 ? &this->state1 : &this->state2;
-        const auto& nextState = this->useState1 ? &this->state2 : &this->state1;
-
-        for(int y = 0; y < size; ++y) {
-            for (int x = 0; x < size; ++x) {
+        for(int y = 0; y < N; ++y) {
+            for (int x = 0; x < N; ++x) {
                 int liveNeighbors = 0;
                 for (auto& n : NEIGHBORS) {
                     const int nx = x + n.first;
                     const int ny = y + n.second;
 
-                    if (nx >= 0 && nx < size && ny >= 0 && ny < size) {
-                        liveNeighbors += (*currentState)[ny][nx];
+                    if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
+                        liveNeighbors += curState[ny][nx];
                     }
                 }
 
-                if ((*currentState)[y][x]) {
-                    (*nextState)[y][x] = (liveNeighbors == 2 || liveNeighbors == 3);
+                if (curState[y][x]) {
+                    nextState[y][x] = (liveNeighbors == 2 || liveNeighbors == 3);
                 } else {
-                    (*nextState)[y][x] = (liveNeighbors == 3);
+                    nextState[y][x] = (liveNeighbors == 3);
                 }
             }
         }
 
-        this->useState1 = !useState1;
+        std::swap(curState, nextState);
     };
 
-    const bool*** getBoard() const {
-        return this->useState1 ? &this->state1 : &this->state2;
+    const bool cellIsActive(const std::size_t row, const std::size_t col) const {
+        return curState[row][col];
     };
 
 private:
-    bool state1[size][size];
-    bool state2[size][size];
-    bool useState1;
+    bool curState[N][N];
+    bool nextState[N][N];
 };
 
 #endif

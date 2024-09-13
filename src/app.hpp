@@ -13,6 +13,8 @@
 
 class App {
 public: 
+    bool isRunning;
+    
     App();
     ~App();
     void update(float);

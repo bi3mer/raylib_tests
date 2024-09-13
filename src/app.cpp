@@ -1,40 +1,41 @@
 #include "app.hpp"
 
 App::App() {
-    this->scene = nullptr;
-    this->titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
+    isRunning = true;
+    scene = nullptr;
+    titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
 
-    this->sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
-    this->sceneFactories[1] = new SceneFactory<SceneConwaysGame>((char*) "Conway's Game of Life");
+    sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
+    sceneFactories[1] = new SceneFactory<SceneConwaysGame>((char*) "Conway's Game of Life");
 }
 
 App::~App() {
-    if (this->scene == nullptr) {
-        delete this->scene;
+    if (scene == nullptr) {
+        delete scene;
     }
 
-    for (ISceneFactory* sf : this->sceneFactories) {
+    for (ISceneFactory* sf : sceneFactories) {
         delete sf;
     }
 }
 
 void App::update(float dt) {
-    if (this->scene != nullptr) {
-        this->scene->update(dt);
+    if (scene != nullptr) {
+        scene->update(dt);
 
-        if (this->scene->changeScene) {
-            this->scene->on_exit();
-            delete this->scene;
-            this->scene = nullptr;
+        if (scene->changeScene) {
+            scene->on_exit();
+            delete scene;
+            scene = nullptr;
         }
+    } else if (IsKeyPressed(KEY_ESCAPE)) {
+        isRunning = false;
     }
-
-    // otherwise do nothing
 }
 
 void App::draw() {
-    if (this->scene != nullptr) {
-        this->scene->draw();
+    if (scene != nullptr) {
+        scene->draw();
         return;
     }
 
@@ -45,12 +46,12 @@ void App::draw() {
     const float H = GetScreenHeight();
 
 
-    DrawText("Raylib Tests", (W - this->titleDimensions.x) / 2, (H - this->titleDimensions.y) * 0.1f, 32, BLACK);
+    DrawText("Raylib Tests", (W - titleDimensions.x) / 2, (H - titleDimensions.y) * 0.1f, 32, BLACK);
     
     float y = 100;
-    for (const ISceneFactory* sf : this->sceneFactories) {
+    for (const ISceneFactory* sf : sceneFactories) {
         if (GuiButton((Rectangle) {100, y, 150, 40}, sf->getName())) {
-            this->scene = sf->constructScene();
+            scene = sf->constructScene();
         }
         
         y += 100; 

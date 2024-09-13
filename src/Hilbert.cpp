@@ -64,6 +64,4 @@ void Hilbert::increase_order() {
     max_size = pow(N, 2);
     index = 1; // skip first, we know what it always is
     last_pos = HILBERT_POSITIONS[0];
-
-    printf("order: %zu\n", order);
 }

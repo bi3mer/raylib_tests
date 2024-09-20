@@ -17,9 +17,11 @@ public:
     virtual void draw();
 
 private:
+    const float paddleModifier = 0.01f;
+
     Vector2 ball;
     Vector2 ballVelocity;
-    Vector2 playerPaddle;
-    Vector2 aiPaddle;
+    Rectangle playerPaddle;
+    Rectangle aiPaddle;
 };
 #endif

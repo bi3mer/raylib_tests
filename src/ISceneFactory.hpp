@@ -5,13 +5,13 @@
 
 class ISceneFactory {
 public:
-    ISceneFactory(char *);
+    ISceneFactory(const char *);
     virtual ~ISceneFactory();
 
-    char* getName() const;
+    const char* getName() const;
     virtual IScene* constructScene() const = 0;
 private:
-    char* name;
+    const char* name;
 };
 
 #endif

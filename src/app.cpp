@@ -5,9 +5,10 @@ App::App() {
     scene = nullptr;
     titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
 
-    sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>((char*) "Frictionless Ball");
-    sceneFactories[1] = new SceneFactory<SceneConwaysGame>((char*) "Conway's Game of Life");
-    sceneFactories[2] = new SceneFactory<SceneHilbertCurves>((char*) "Hilbert Curves");
+    sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>("Frictionless Ball");
+    sceneFactories[1] = new SceneFactory<SceneConwaysGame>("Conway's Game of Life");
+    sceneFactories[2] = new SceneFactory<SceneHilbertCurves>("Hilbert Curves");
+    sceneFactories[3] = new SceneFactory<PongMenu>("Pong");
 }
 
 App::~App() {

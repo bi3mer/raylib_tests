@@ -8,6 +8,7 @@
 #include "SceneFrictionlessBall.hpp"
 #include "SceneConwaysGameOfLife.hpp"
 #include "SceneHilbertCurves.hpp"
+#include "PongMenu.hpp"
 
 #include "ISceneFactory.hpp"
 #include "SceneFactory.hpp"
@@ -23,6 +24,6 @@ public:
 private:
     IScene* scene;
     Vector2 titleDimensions;
-    ISceneFactory* sceneFactories[3];
+    ISceneFactory* sceneFactories[4];
 };
 #endif

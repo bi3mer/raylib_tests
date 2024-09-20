@@ -6,7 +6,7 @@
 template <class T>
 class SceneFactory : public ISceneFactory {
 public:
-    SceneFactory(char* name) : ISceneFactory(name) { }
+    SceneFactory(const char* name) : ISceneFactory(name) { }
     ~SceneFactory() { }
 
     IScene* constructScene() const {

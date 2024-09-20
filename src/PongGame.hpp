@@ -17,7 +17,13 @@ public:
     virtual void draw();
 
 private:
-    const float paddleModifier = 0.01f;
+    const float scoreTextSize = 30;
+    const float paddleModifier = 0.5f;
+    const float paddleRounded = 0.5f;
+    const float ballRadius = 0.05f;
+
+    int playerScore;
+    int aiScore;
 
     Vector2 ball;
     Vector2 ballVelocity;

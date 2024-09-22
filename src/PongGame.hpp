@@ -21,6 +21,8 @@ private:
     const float paddleModifier = 0.5f;
     const float paddleRounded = 0.5f;
     const float ballRadius = 0.01f;
+    const float maxBounceAngle = PI / 3.0f;
+    const float speedUp = 1.01f;
 
     int playerScore;
     int aiScore;

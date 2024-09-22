@@ -1,8 +1,5 @@
 #include "PongGame.hpp"
 #include "stdio.h"
-/**
- * [ ] ball trajectory affected by the paddle
- */
 
 PongGame::PongGame() { 
     aiScore = 0;
@@ -13,7 +10,7 @@ PongGame::~PongGame() { }
 
 void PongGame::on_enter() {
     ball = { .x = 0.5f, .y = 0.5f };
-    ballVelocity = { .x = -0.3f, .y = 0.1f};
+    ballVelocity = { .x = -0.3f, .y = 0.0f};
     
     playerPaddle = { 
         .x = 0.05f, 
@@ -67,16 +64,16 @@ void PongGame::update(float dt) {
     const float W = GetScreenWidth();
     const float H = GetScreenHeight();
     worldPlayerPaddle = {
-        .x = playerPaddle.x * W, 
+        .x = playerPaddle.x * W + playerPaddle.width - 0.01f, // see comment at the end of the function 
         .y = playerPaddle.y * H, 
-        .width = playerPaddle.width * W, 
+        .width = 0.01f,
         .height = playerPaddle.height * H
     };
 
     worldAIPaddle = {
         .x = aiPaddle.x * W, 
         .y = aiPaddle.y * H, 
-        .width = aiPaddle.width * W, 
+        .width = 0.1f,
         .height = aiPaddle.height * H
     };
 
@@ -86,7 +83,7 @@ void PongGame::update(float dt) {
         ball.x += ballVelocity.x * diffDT;
         ball.y += ballVelocity.y * diffDT;
 
-        const float br = ballRadius * W;
+        const float br = ballRadius * fmin(W, H);
         const Vector2 b = { .x = ball.x * W, .y = ball.y * H};
 
         if (ball.x >= 1.0) {
@@ -105,22 +102,48 @@ void PongGame::update(float dt) {
             ball.y = 0.5f;
             ballVelocity.x = -0.2f; 
             ballVelocity.y = 0.0f;
-        } else if (ball.y >= 1.0) {   // collision with bottom wall
-            ball.y = 0.99f;           // reset ball position
-            ballVelocity.y *= -1.01f; // speed ball up
+        } else if (ball.y >= 1.0) { // collision with bottom wall
+            ball.y = 0.99f;
+            ballVelocity.y *= -speedUp; 
         } else if (ball.y <= 0.0) {   
             ball.y = 0.01f;
-            ballVelocity.y *= -1.01f; 
+            ballVelocity.y *= -speedUp; 
         } else if (CheckCollisionCircleRec(b, br, worldPlayerPaddle)) { 
-            // collision with player paddle
-            ball.x += 0.01f;          // Move away from paddle to prevent duplicate collisions
-            ballVelocity.x *= -1.01f; // Ball goes the other way
+            // ---- collision with player paddle ----
+            // Move away from paddle to prevent duplicate collisions
+            ball.x += 0.01f;          
+            
+            const float anglePercent = (ball.y - playerPaddle.y) / playerPaddle.height;
+            const float angle = -Lerp(-maxBounceAngle, maxBounceAngle, anglePercent);
+            const float ballSpeed = Vector2Length(ballVelocity);
+
+            ballVelocity.x = cos(angle) * ballSpeed * speedUp;
+            ballVelocity.y = -sin(angle) * ballSpeed;
         } else if (CheckCollisionCircleRec(b, br, worldAIPaddle)) {
-            // collision with ai paddle
+            // ---- collision with AI paddle ----
+            // code logic is exactly the same as the player paddle above
             ball.x -= 0.01f;
-            ballVelocity.x *= -1.01f;
+            
+            const float anglePercent = (ball.y - aiPaddle.y) / aiPaddle.height;
+            const float angle = -Lerp(-maxBounceAngle, maxBounceAngle, anglePercent);
+            const float ballSpeed = Vector2Length(ballVelocity);
+
+            ballVelocity.x = -cos(angle) * ballSpeed * speedUp;
+            ballVelocity.y = -sin(angle) * ballSpeed;
         }
     }
+
+    // Wanted collision with AI paddle to be one sided:
+    //
+    // XXXX      ---X
+    // XXXX  to  ---X
+    // XXXX      ---X
+    //
+    // Now the correct values are needed for rendering when draw() is called
+    worldPlayerPaddle.x = playerPaddle.x * W;
+    worldPlayerPaddle.width = playerPaddle.width * W; 
+
+    worldAIPaddle.width = aiPaddle.width * W;
 }
 
 void PongGame::draw() {
@@ -155,5 +178,5 @@ void PongGame::draw() {
     DrawRectangleRounded(worldAIPaddle, paddleRounded, 1, BLACK);
 
     // render ball
-    DrawCircle(ball.x * W, ball.y * H, W*ballRadius, BLACK);
+    DrawCircle(ball.x * W, ball.y * H, ballRadius*fmin(W, H), BLACK);
 }

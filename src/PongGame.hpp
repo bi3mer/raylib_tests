@@ -20,7 +20,7 @@ private:
     const float scoreTextSize = 30;
     const float paddleModifier = 0.5f;
     const float paddleRounded = 0.5f;
-    const float ballRadius = 0.05f;
+    const float ballRadius = 0.01f;
 
     int playerScore;
     int aiScore;
@@ -29,5 +29,8 @@ private:
     Vector2 ballVelocity;
     Rectangle playerPaddle;
     Rectangle aiPaddle;
+
+    Rectangle worldPlayerPaddle;
+    Rectangle worldAIPaddle;
 };
 #endif

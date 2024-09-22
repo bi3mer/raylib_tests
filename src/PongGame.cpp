@@ -1,7 +1,7 @@
 #include "PongGame.hpp"
 #include "stdio.h"
 /**
- * [ ] Ball collision with paddles
+ * [ ] ball trajectory affected by the paddle
  */
 
 PongGame::PongGame() { 
@@ -13,7 +13,7 @@ PongGame::~PongGame() { }
 
 void PongGame::on_enter() {
     ball = { .x = 0.5f, .y = 0.5f };
-    ballVelocity = { .x = -0.2f, .y = 0.0f};
+    ballVelocity = { .x = -0.3f, .y = 0.1f};
     
     playerPaddle = { 
         .x = 0.05f, 
@@ -42,28 +42,52 @@ void PongGame::update(float dt) {
         changeScene = true;
     }
 
-    // update player paddle
-    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-        playerPaddle.y -= paddleModifier * dt;
+    // update player paddle position, and do not let the paddle go past the 
+    // screen's borders
+    const float moveModifier = paddleModifier * dt;
+    if ((IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) && playerPaddle.y - moveModifier >= 0) {
+        playerPaddle.y -= moveModifier;
     }
 
-    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
-        playerPaddle.y += paddleModifier * dt;
+    if ((IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) && playerPaddle.y + playerPaddle.height + moveModifier <= 1) {
+        playerPaddle.y += moveModifier;
     }
 
-    // update ai paddle
-    const float ballNextHeight = ball.y + ballVelocity.y*dt;
+    // update ai paddle position based on the ball's next position
+    const float ballNextHeight = ball.y + ballVelocity.y * dt;
     if (ballNextHeight > aiPaddle.y + aiPaddle.height) {
-        aiPaddle.y += paddleModifier * dt;
+        aiPaddle.y += moveModifier;
     } else if (ballNextHeight < aiPaddle.y) {
-        aiPaddle.y -= paddleModifier * dt;
+        aiPaddle.y -= moveModifier;
     }
+
+    // Ball is rendered based on width, so it's easier to use world position
+    // for collisions. Since the results are used in the draw call, they are
+    // kept local to the class to not calculate the same thing twice.
+    const float W = GetScreenWidth();
+    const float H = GetScreenHeight();
+    worldPlayerPaddle = {
+        .x = playerPaddle.x * W, 
+        .y = playerPaddle.y * H, 
+        .width = playerPaddle.width * W, 
+        .height = playerPaddle.height * H
+    };
+
+    worldAIPaddle = {
+        .x = aiPaddle.x * W, 
+        .y = aiPaddle.y * H, 
+        .width = aiPaddle.width * W, 
+        .height = aiPaddle.height * H
+    };
 
     // update ball position in small steps
     const float diffDT = dt / 5.0f;
     for (std::size_t i = 0; i < 5; ++i) {
         ball.x += ballVelocity.x * diffDT;
         ball.y += ballVelocity.y * diffDT;
+
+        const float br = ballRadius * W;
+        const Vector2 b = { .x = ball.x * W, .y = ball.y * H};
 
         if (ball.x >= 1.0) {
             ++playerScore;
@@ -87,18 +111,15 @@ void PongGame::update(float dt) {
         } else if (ball.y <= 0.0) {   
             ball.y = 0.01f;
             ballVelocity.y *= -1.01f; 
-        } else if (CheckCollisionCircleRec(ball, ballRadius, playerPaddle)) { 
+        } else if (CheckCollisionCircleRec(b, br, worldPlayerPaddle)) { 
             // collision with player paddle
-            printf("Collision with player paddle!\n");
-            ballVelocity.x *= -1.01f;
-        } else if (CheckCollisionCircleRec(ball, ballRadius, aiPaddle)) {
+            ball.x += 0.01f;          // Move away from paddle to prevent duplicate collisions
+            ballVelocity.x *= -1.01f; // Ball goes the other way
+        } else if (CheckCollisionCircleRec(b, br, worldAIPaddle)) {
             // collision with ai paddle
-            printf("Collision with ai paddle!\n");
+            ball.x -= 0.01f;
             ballVelocity.x *= -1.01f;
         }
-        
-        // top-bottom wall collisions
-        // side collision behavior (score + reset ball)
     }
 }
 
@@ -130,23 +151,7 @@ void PongGame::draw() {
     }
 
     // render player paddle
-    const Rectangle worldPlayerPaddle = {
-        .x = playerPaddle.x * W, 
-        .y = playerPaddle.y * H, 
-        .width = playerPaddle.width * W, 
-        .height = playerPaddle.height * H
-    };
-
     DrawRectangleRounded(worldPlayerPaddle, paddleRounded, 1, BLACK);
-
-    // render ai paddle
-    const Rectangle worldAIPaddle = {
-        .x = aiPaddle.x * W, 
-        .y = aiPaddle.y * H, 
-        .width = aiPaddle.width * W, 
-        .height = aiPaddle.height * H
-    };
-
     DrawRectangleRounded(worldAIPaddle, paddleRounded, 1, BLACK);
 
     // render ball

@@ -9,6 +9,7 @@
 #include "SceneConwaysGameOfLife.hpp"
 #include "SceneHilbertCurves.hpp"
 #include "PongMenu.hpp"
+#include "nbody.hpp"
 
 #include "ISceneFactory.hpp"
 #include "SceneFactory.hpp"
@@ -24,6 +25,6 @@ public:
 private:
     IScene* scene;
     Vector2 titleDimensions;
-    ISceneFactory* sceneFactories[4];
+    ISceneFactory* sceneFactories[5];
 };
 #endif

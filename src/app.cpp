@@ -9,6 +9,7 @@ App::App() {
     sceneFactories[1] = new SceneFactory<SceneConwaysGame>("Conway's Game of Life");
     sceneFactories[2] = new SceneFactory<SceneHilbertCurves>("Hilbert Curves");
     sceneFactories[3] = new SceneFactory<PongMenu>("Pong");
+    sceneFactories[4] = new SceneFactory<NBody>("N Body");
 }
 
 App::~App() {

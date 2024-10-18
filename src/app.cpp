@@ -1,15 +1,25 @@
 #include "app.hpp"
+#include "ISceneFactory.hpp"
+#include "SceneFrictionlessBall.hpp"
+#include "SceneConwaysGameOfLife.hpp"
+#include "SceneHilbertCurves.hpp"
+#include "PongMenu.hpp"
+#include "Snake.hpp"
+#include "SceneFactory.hpp"
+#include "raygui.hpp"
+#include "raylib.h"
 
 App::App() {
     isRunning = true;
     scene = nullptr;
     titleDimensions = MeasureTextEx(GetFontDefault(), "Raylib Tests", 32, 1);
 
-    sceneFactories[0] = new SceneFactory<SceneFrictionlessBall>("Frictionless Ball");
-    sceneFactories[1] = new SceneFactory<SceneConwaysGame>("Conway's Game of Life");
-    sceneFactories[2] = new SceneFactory<SceneHilbertCurves>("Hilbert Curves");
-    sceneFactories[3] = new SceneFactory<PongMenu>("Pong");
-    sceneFactories[4] = new SceneFactory<NBody>("N Body");
+    simulationFactories[0] = new SceneFactory<SceneFrictionlessBall>("Frictionless Ball");
+    simulationFactories[1] = new SceneFactory<SceneConwaysGame>("Conway's Game of Life");
+    simulationFactories[2] = new SceneFactory<SceneHilbertCurves>("Hilbert Curves");
+    
+    gameFactories[0] = new SceneFactory<PongMenu>("Pong");
+    gameFactories[1] = new SceneFactory<Snake>("Snake");
 }
 
 App::~App() {
@@ -17,8 +27,12 @@ App::~App() {
         delete scene;
     }
 
-    for (const ISceneFactory* sf : sceneFactories) {
+    for (const ISceneFactory* sf : simulationFactories) {
         delete sf;
+    }
+
+    for (const ISceneFactory* gf : gameFactories) {
+        delete gf;
     }
 }
 
@@ -27,6 +41,7 @@ void App::update(float dt) {
         scene->update(dt);
 
         if (scene->changeScene) {
+            SetWindowTitle("Raylib Tests");
             scene->on_exit();
             delete scene;
             scene = nullptr;
@@ -48,15 +63,28 @@ void App::draw() {
     const float W = GetScreenWidth();
     const float H = GetScreenHeight();
 
-
     DrawText("Raylib Tests", (W - titleDimensions.x) / 2, (H - titleDimensions.y) * 0.1f, 32, BLACK);
-    
-    float y = 100;
-    for (const ISceneFactory* sf : sceneFactories) {
+
+    float y = 200;
+    for (const ISceneFactory* sf : simulationFactories) {
         if (GuiButton((Rectangle) {100, y, 150, 40}, sf->getName())) {
+            SetWindowTitle(sf->getName());
             scene = sf->constructScene();
+            scene->on_enter();
         }
-        
+
+        y += 100; 
+    }
+
+
+    y = 200;
+    for (const ISceneFactory* sf : gameFactories) {
+        if (GuiButton((Rectangle) {450, y, 150, 40}, sf->getName())) {
+            SetWindowTitle(sf->getName());
+            scene = sf->constructScene();
+            scene->on_enter();
+        }
+
         y += 100; 
     }
 }

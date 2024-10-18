@@ -5,14 +5,8 @@
 #include "raygui.hpp"
 
 #include "IScene.hpp"
-#include "SceneFrictionlessBall.hpp"
-#include "SceneConwaysGameOfLife.hpp"
-#include "SceneHilbertCurves.hpp"
-#include "PongMenu.hpp"
-#include "nbody.hpp"
 
 #include "ISceneFactory.hpp"
-#include "SceneFactory.hpp"
 
 class App {
 public: 
@@ -25,6 +19,7 @@ public:
 private:
     IScene* scene;
     Vector2 titleDimensions;
-    ISceneFactory* sceneFactories[5];
+    ISceneFactory* simulationFactories[3];
+    ISceneFactory* gameFactories[2];
 };
 #endif

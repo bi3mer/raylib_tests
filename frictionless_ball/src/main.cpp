@@ -32,7 +32,7 @@ void update(State& state) {
     if (state.pause) return;
 
     // simulate 3 steps
-    const float dt = GetFrameTime() / 3.0;
+    const float dt = std::min(GetFrameTime(), 0.16666f)  / 3.0;
     const Vector2 gravity = Vector2Scale(G, dt);
 
     for (uint_fast8_t i = 0; i < 3; ++i) {
@@ -62,17 +62,17 @@ void render(const State& state) {
     const float start = 0.1f*min;
     const float end = 0.9f*min;
 
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
 
-    DrawRectangle(start, start, 0.8f*min, 0.8f*min, BLACK);
+    DrawRectangle(start, start, 0.8f*min, 0.8f*min, GRAY);
     DrawCircle(
         Lerp(start, end, state.pos.x),
         Lerp(start, end, state.pos.y),
         min*state.radius,
-        RED
+        BLACK
     );
 
-    DrawText("Press space to pause and unpause.", 10, 10, 20, GRAY);
+    DrawText("Press space to pause and unpause.", 10, 10, 20, RAYWHITE);
 
     if (state.pause) {
         Vector2 dimension = MeasureTextEx(GetFontDefault(), "PAUSED", 30, 1);
@@ -81,7 +81,7 @@ void render(const State& state) {
             (start + end - dimension.x) / 2.0f, 
             (start + end - dimension.y) / 2.0f, 
             30, 
-            RAYWHITE
+            BLACK
         );
     }
 }

@@ -1,5 +1,3 @@
-#define DEBUG true
-
 #include "raylib.h"
 #include "raymath.h"
 #include <algorithm>

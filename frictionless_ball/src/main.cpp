@@ -100,7 +100,7 @@ void render(const State& state) {
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(1080, 720, "raylib Tests");
+    InitWindow(1080, 720, "CFB: Frictionless Ball");
     SetTargetFPS(60);
 
     State state;

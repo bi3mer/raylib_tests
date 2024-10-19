@@ -24,7 +24,7 @@ void render(const State& state) {
     const float H = (float) GetScreenHeight();
     
     // Draw the grid
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
 
     const float start_x = W * 0.1f;
     const float x_mod = (W*0.9f - start_x) / 100.0f;
@@ -39,12 +39,12 @@ void render(const State& state) {
         float x_pos = W*0.1;
         for(std::size_t x = 0; x < 100; ++x, x_pos+=mod) {
             if (state.conway.cellIsActive(y, x)) {
-                DrawRectangle(x_pos, y_pos, mod-1, mod-1, BLACK);
+                DrawRectangle(x_pos, y_pos, mod-1, mod-1, RED);
             }
         }
     }
 
-    DrawText("Conway's Game of Life", start_x, start_y-30, 20, BLACK);
+    DrawText("Conway's Game of Life", start_x, start_y-30, 20, RAYWHITE);
 }
 
 #ifdef EMSCRIPTEN
@@ -63,7 +63,7 @@ void render(const State& state) {
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(1080, 720, "raylib Tests");
+    InitWindow(1080, 720, "CFB: Conway's Game of Life");
     SetTargetFPS(60);
 
     State state;

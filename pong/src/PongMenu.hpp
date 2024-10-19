@@ -6,8 +6,6 @@
 
 #include "IScene.hpp"
 
-#include "PongGame.hpp"
-
 class PongMenu : public IScene {
 public: 
     PongMenu();
@@ -28,6 +26,5 @@ private:
     float instructionsBlinkTime;
     Vector2 titleDimensions;
     Vector2 instructionDimensions;
-    PongGame game;
 };
 #endif

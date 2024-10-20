@@ -1,9 +1,11 @@
 #include "raylib.h"
 #include "Conway.hpp"
 
+#define GRID_SIZE 100
+
 typedef struct State {
     float time;
-    Conway<100> conway;
+    Conway<GRID_SIZE> conway;
 } State;
 
 void init_state(State& state) {
@@ -22,29 +24,50 @@ void update(State& state) {
 void render(const State& state) {
     const float W = (float) GetScreenWidth();
     const float H = (float) GetScreenHeight();
+
+    const float min = std::min(H, W); 
+    const float grid_length = 0.8f* min;
+     
+    float startX;
+    float startY;
+
+    if (H > W) {
+        startX = 0.1f*min;
+        startY = (H - grid_length) / 2;
+    } else {
+        startY = 0.1f*min;
+        startX = (W - grid_length) / 2;
+    }
+
+    const float cell_dimension = grid_length / GRID_SIZE;
     
     // Draw the grid
     ClearBackground(BLACK);
 
-    const float start_x = W * 0.1f;
-    const float x_mod = (W*0.9f - start_x) / 100.0f;
+    /*const float start_x = W * 0.1f;*/
+    /*const float x_mod = (W*0.9f - start_x) / GRID_SIZE.0f;*/
+    /**/
+    /*const float start_y = H * 0.1f;*/
+    /*const float y_mod = (H*0.9f - start_y) / GRID_SIZE.0f;*/
 
-    const float start_y = H * 0.1f;
-    const float y_mod = (H*0.9f - start_y) / 100.0f;
+    /*const float mod = std::min(x_mod, y_mod);*/
 
-    const float mod = std::min(x_mod, y_mod);
-
-    float y_pos = H*0.1f;
-    for(std::size_t y = 0; y < 100; ++y, y_pos+=mod) {
-        float x_pos = W*0.1;
-        for(std::size_t x = 0; x < 100; ++x, x_pos+=mod) {
+    for(std::size_t y = 0; y < GRID_SIZE; ++y) {
+        float y_pos = startY + y*cell_dimension;
+        for(std::size_t x = 0; x < GRID_SIZE; ++x) {
             if (state.conway.cellIsActive(y, x)) {
-                DrawRectangle(x_pos, y_pos, mod-1, mod-1, RED);
+                DrawRectangle(
+                    startX + x*cell_dimension, 
+                    y_pos, 
+                    cell_dimension - 1,
+                    cell_dimension - 1, 
+                    RED
+                );
             }
         }
     }
 
-    DrawText("Conway's Game of Life", start_x, start_y-30, 20, RAYWHITE);
+    DrawText("Conway's Game of Life", startX, startY - 30, 20, RAYWHITE);
 }
 
 #ifdef EMSCRIPTEN

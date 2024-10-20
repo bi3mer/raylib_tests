@@ -100,9 +100,10 @@ void place_food(State& state) {
             index = GetRandomValue(0, GRID_LENGTH-1);
         } while(state.grid[index] != EMPTY);
     } else {
-        // otherwwise, it's pretty long, so we find the empty indexes first. 
-        // Based on the if check we know that we have at most half indices free
-        std::size_t indices[GRID_LENGTH / 2];
+        // otherwwise, it's pretty long, so we find the empty indexes first,
+        // and we already know the length based on the size of the grid and the 
+        // the size of the snake
+        std::size_t indices[GRID_LENGTH - state.snake_size];
         std::size_t size = 0;
 
         for(std::size_t i = 0; i < GRID_LENGTH; ++i) {

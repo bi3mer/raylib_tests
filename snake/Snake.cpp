@@ -1,5 +1,4 @@
 #include "Snake.hpp"
-#include "raylib.h"
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

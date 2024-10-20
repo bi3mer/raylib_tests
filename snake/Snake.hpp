@@ -9,8 +9,7 @@
 
 
 /**
- * [ ] Food placement procedure
- * [ ] Better display of the grid
+ * [ ] Food placement procedure.
  * [ ] Snake moves every X seconds 
  * [ ] Snake can change directions
  * [ ] Snake increase in size on collision with food
@@ -50,7 +49,7 @@ private:
 
     CellType grid[GRID_SIZE * GRID_SIZE];
     Direction snake_direction;
-    Vector2SizeT snake_head;
-    Vector2SizeT snake_tail;
+    DS::Vector2SizeT snake_head;
+    DS::Vector2SizeT snake_tail;
 };
 #endif

@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
-
 #include "raylib.h"
+
 #include "state.hpp"
 #include "menu.hpp"
 #include "game.hpp"
@@ -69,7 +69,7 @@ int main() {
     emscripten_set_main_loop_arg(wasm_step, &state, 0, 1);
 #else
     while (!WindowShouldClose()) {
-        bool is_menu_state = state.current_scene == MENU || state.current_scene == WON || state.current_scene == LOST;
+        bool is_menu_state = state.current_scene != Scene::GAME; 
         if (is_menu_state && IsKeyPressed(KEY_ESCAPE)) {
             break;
         }

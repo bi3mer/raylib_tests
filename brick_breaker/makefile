@@ -16,5 +16,5 @@ wasm:
 		# --embed-file ./assets \
 
 run:
-	g++ src/*.cpp -I./src/*.hpp  -lraylib -std=c++17
+	g++ src/*.cpp -I./src/*.hpp  -lraylib -lbox2d -std=c++17
 	./a.out	

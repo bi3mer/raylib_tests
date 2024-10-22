@@ -1,11 +1,17 @@
 #include "state.hpp"
+#include "box2d/b2_world.h"
 #include <cstdio>
 
-void init_state(State& state) {
-    state.show_instructions = true;
-    state.current_scene = Scene::MENU;
+State::State() : world({0, 0}) {
+    show_instructions = true;
+    current_scene = Scene::MENU;
+
 }
 
-void initialize_state_for_game(State& state) {
-    printf("initialize_state_for_game not yet implemented\n");
+State::~State() {
+    /*b2DestroyWorld(world_id);*/
+}
+
+void State::set_up_for_game() {
+    printf("state::set_up_for_game not yet implemented\n");
 }

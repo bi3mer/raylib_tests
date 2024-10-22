@@ -16,7 +16,7 @@ const int INSTRUCTIONS_FONT_SIZE = 22;
 void menu_update(State& state) {
     if (IsKeyPressed(KEY_SPACE)) {
         state.current_scene = Scene::GAME;
-        initialize_state_for_game(state);
+        state.set_up_for_game();
         return;
     }
 

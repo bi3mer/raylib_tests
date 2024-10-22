@@ -2,7 +2,6 @@
 #include "scenes.hpp"
 
 #include "raylib.h"
-#include <Box2d/Box2d.h>
 #include <cstdio>
 
 void game_update(State& state) {

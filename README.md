@@ -2,15 +2,6 @@
 
 This repo has a bunch of tests and experiments with [raylib](https://www.raylib.com/). The purpose is to make small games and simulations that are either interesting to me, fun, or help me learning something new about the library. Each directory in this repo is one of those experiments.
 
-## Implemented
-
-- Simulations
-    - Frictionless bouncing ball
-    - Conway's Game of Life
-    - Hilbert Curves
-    - N-Body
-- Games
-    - Pong
 
 ## Ideas
 
@@ -27,7 +18,6 @@ I need to change the main menu to be a scrolling list of buttons.
 
 ### Games
 
-- Snake
 - Tic-Tac-Toe
 - Pac-man
 - Asteroids

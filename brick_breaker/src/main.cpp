@@ -63,7 +63,6 @@ int main() {
     SetExitKey(KEY_NULL);
 
     State state;
-    init_state(state);
 
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop_arg(wasm_step, &state, 0, 1);

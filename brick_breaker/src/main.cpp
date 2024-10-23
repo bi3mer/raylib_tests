@@ -58,7 +58,7 @@ void render(const State& state) {
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(1080, 720, "CFB: Snake");
+    InitWindow(1080, 720, "CFB: Brick Breaker");
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
 

@@ -1,8 +1,7 @@
 #ifndef HILBERT_HPP
 #define HILBERT_HPP
 
-#include <cstddef>
-#include <deque>
+#include <stdio.h>
 #include <raylib.h>
 #include <raymath.h>
 

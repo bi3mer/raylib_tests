@@ -81,6 +81,7 @@ typedef struct State {
     std::size_t snake_size;
     Position snake_head;
     Position snake_tail;
+    Shader shader;
     CellType grid[GRID_SIZE * GRID_SIZE];
 } State;
 
@@ -101,7 +102,7 @@ void place_food(State& state) {
         } while(state.grid[index] != EMPTY);
     } else {
         // otherwwise, it's pretty long, so we find the empty indexes first,
-        // and we already know the length based on the size of the grid and the 
+        // and we already know the length based on the size of the grid and the
         // the size of the snake
         std::size_t indices[GRID_LENGTH - state.snake_size];
         std::size_t size = 0;
@@ -115,7 +116,7 @@ void place_food(State& state) {
 
         index = indices[GetRandomValue(0, size-1)];
     }
-    
+
     state.grid[index] = FOOD;
 }
 
@@ -194,7 +195,7 @@ void update_game(State& state) {
     switch (state.grid[head_index]) {
         case FOOD:
             ++state.snake_size; // taill isn't moved, so the snake grows in size
-            
+
             if (state.snake_size == GRID_LENGTH) {
                 state.current_scene = WON;
             } else {
@@ -207,8 +208,8 @@ void update_game(State& state) {
         case SOUTH:
         case WEST:
             // snake collided with itself, player lost
-            state.current_scene = LOST; 
-            break; 
+            state.current_scene = LOST;
+            break;
         case EMPTY: {
             // move the tail
             const std::size_t tail_index = to_index(state.snake_tail);
@@ -222,7 +223,7 @@ void update_game(State& state) {
             printf("Unhandled cell type: %d\n", (int) state.grid[head_index]);
             exit(1);
     }
-    
+
     state.grid[head_index] = EAST; // dir replaced on next move
 }
 
@@ -233,11 +234,11 @@ void update(State& state) {
         case Scene::LOST:
             update_menu(state);
             break;
-        case Scene::GAME: 
+        case Scene::GAME:
             update_game(state);
             break;
-        
-        default: 
+
+        default:
             printf("Unhandled scene type in update: %d\n", (int) state.current_scene);
             exit(1);
             break;
@@ -248,7 +249,7 @@ void update(State& state) {
 void render_menu(const State& state) {
     const float W = (float) GetScreenWidth();
     const float H = (float) GetScreenHeight();
-    
+
     const char* title;
     const char* instructions;
 
@@ -271,22 +272,22 @@ void render_menu(const State& state) {
     }
 
     Vector2 titleDimensions = MeasureTextEx(GetFontDefault(), title, TITLE_FONT_SIZE, 1);
-    Vector2 instructionDimensions = MeasureTextEx(GetFontDefault(), instructions, INSTRUCTIONS_FONT_SIZE, 1);   
+    Vector2 instructionDimensions = MeasureTextEx(GetFontDefault(), instructions, INSTRUCTIONS_FONT_SIZE, 1);
 
     DrawText(
-        title, 
-        (W - titleDimensions.x) / 2, 
-        (H - titleDimensions.y) * 0.1f, 
-        TITLE_FONT_SIZE, 
+        title,
+        (W - titleDimensions.x) / 2,
+        (H - titleDimensions.y) * 0.1f,
+        TITLE_FONT_SIZE,
         RAYWHITE
     );
 
     if (state.show_instructions) {
         DrawText(
-            instructions, 
-            (W - instructionDimensions.x) / 2, 
-            (H - instructionDimensions.y) / 2, 
-            INSTRUCTIONS_FONT_SIZE, 
+            instructions,
+            (W - instructionDimensions.x) / 2,
+            (H - instructionDimensions.y) / 2,
+            INSTRUCTIONS_FONT_SIZE,
             RAYWHITE
         );
     }
@@ -296,7 +297,7 @@ void render_game(const State& state) {
     const float W = (float) GetScreenWidth();
     const float H = (float) GetScreenHeight();
 
-    const float min = std::min(H, W); 
+    const float min = std::min(H, W);
     const float grid_length = 0.8f* min;
 
     float startX;
@@ -323,7 +324,7 @@ void render_game(const State& state) {
                 case FOOD:
                     DrawRectangle(posX, posY, cell_dimension - 1, cell_dimension - 1, GREEN);
                     break;
-                case NORTH: 
+                case NORTH:
                 case EAST:
                 case SOUTH:
                 case WEST:
@@ -341,28 +342,37 @@ void render_game(const State& state) {
 
 void render(const State& state) {
     ClearBackground(BLACK);
+    RenderTexture2D renderTexture;
+    renderTexture.texture.width = GetScreenWidth();
+    renderTexture.texture.height = GetScreenHeight();
+    BeginTextureMode(renderTexture);
 
     switch(state.current_scene) {
-        case Scene::MENU: 
+        case Scene::MENU:
         case Scene::WON:
         case Scene::LOST:
             render_menu(state);
             break;
-        case Scene::GAME: 
+        case Scene::GAME:
             render_game(state);
             break;
-        
-        default: 
+
+        default:
             printf("Unhandled scene type in update: %d\n", (int) state.current_scene);
             exit(1);
             break;
     }
+
+    EndTextureMode();
+    BeginShaderMode(state.shader);
+    DrawTexture(renderTexture.texture, 0, 0, WHITE);
+    EndShaderMode();
 }
 
 /////////////////////// WASM or Desktop Logic  ///////////////////////
 #ifdef EMSCRIPTEN
     #include <emscripten/emscripten.h>
-    
+
     void wasm_step(void* void_state) {
         State* state = static_cast<State*>(void_state);
 
@@ -383,6 +393,8 @@ int main() {
     State state;
     init_state(state);
 
+    state.shader = LoadShader(0, "resources/crt.fs");
+
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop_arg(wasm_step, &state, 0, 1);
 #else
@@ -400,6 +412,7 @@ int main() {
     }
 #endif
 
+    UnloadShader(state.shader);
     CloseWindow();
     return 0;
 }

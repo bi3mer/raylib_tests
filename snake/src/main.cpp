@@ -23,8 +23,8 @@ const char* INSTRUCTIONS_LOST = "Press SPACE to play again";
 const char* INSTRUCTIONS_WON = "Why would you keep playing?";
 const int INSTRUCTIONS_FONT_SIZE = 26;
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
+const int WINDOW_WIDTH = 1080;
+const int WINDOW_HEIGHT = 720;
 
 /////////////////////// Useful Enums //////////////////////
 enum Scene {
@@ -94,12 +94,6 @@ typedef struct State {
     RenderTexture2D renderTexture;
     CellType grid[GRID_SIZE * GRID_SIZE];
 } State;
-
-void init_state(State& state) {
-    state.show_instructions = true;
-    state.time = 0;
-    state.current_scene = Scene::MENU;
-}
 
 /////////////////////// Food Placement Helper //////////////////////////////
 void place_food(State& state) {
@@ -364,30 +358,31 @@ void render(const State& state) {
     const float scale = std::min(screenWidth/WINDOW_WIDTH, screenHeight/WINDOW_HEIGHT);
 
     // draw texture scaled to current window size
-    // BeginShaderMode(state.shader);
     BeginDrawing();
-        ClearBackground(BLACK);
-        DrawTexturePro(
-            state.renderTexture.texture,
-            (Rectangle) {
-                0,
-                0,
-                (float) WINDOW_WIDTH,
-                -(float) WINDOW_HEIGHT
-            },
-            (Rectangle) {
-                (GetScreenWidth() - ((float)WINDOW_WIDTH*scale))*0.5f,
-                (GetScreenHeight() - ((float)WINDOW_HEIGHT*scale))*0.5f,
-                (float) WINDOW_WIDTH * scale,
-                (float) WINDOW_HEIGHT * scale
-            },
-            (Vector2){ 0, 0 },
-            0.0f,
-            WHITE
-        );
+        BeginShaderMode(state.shader);
+            ClearBackground(BLACK);
 
+            DrawTexturePro(
+                state.renderTexture.texture,
+                (Rectangle) {
+                    0,
+                    0,
+                    (float) WINDOW_WIDTH,
+                    -(float) WINDOW_HEIGHT
+                },
+                (Rectangle) {
+                    (GetScreenWidth() - ((float)WINDOW_WIDTH*scale))*0.5f,
+                    (GetScreenHeight() - ((float)WINDOW_HEIGHT*scale))*0.5f,
+                    (float) WINDOW_WIDTH * scale,
+                    (float) WINDOW_HEIGHT * scale
+                },
+                (Vector2){ 0, 0 },
+                0.0f,
+                WHITE
+            );
+
+        EndShaderMode();
     EndDrawing();
-    // EndShaderMode();
 }
 
 /////////////////////// WASM or Desktop Logic  ///////////////////////
@@ -398,26 +393,25 @@ void render(const State& state) {
         State* state = static_cast<State*>(void_state);
 
         update(*state);
-
-        BeginDrawing();
         render(*state);
-        EndDrawing();
     }
 #endif
 
 int main() {
+    // --------- Init
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CFB: Snake");
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
 
     State state;
-    init_state(state);
-
-    printf("version: %d\n", GLSL_VERSION);
+    state.show_instructions = true;
+    state.time = 0;
+    state.current_scene = Scene::MENU;
     state.shader = LoadShader(0, TextFormat("resources/%i/crt.fs", GLSL_VERSION));
     state.renderTexture = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
 
+    // --------- Loop
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop_arg(wasm_step, &state, 0, 1);
 #else
@@ -432,8 +426,10 @@ int main() {
     }
 #endif
 
+    // --------- De-Init
     UnloadShader(state.shader);
     UnloadRenderTexture(state.renderTexture);
     CloseWindow();
+
     return 0;
 }

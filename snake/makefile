@@ -12,9 +12,9 @@ wasm:
 		-s MODULARIZE=1 \
 		-s EXPORT_ES6=1 \
 		-o index.js \
+		--embed-file ./resources \
 		-O3
-		# --embed-file ./assets \
 
 run:
 	g++ src/*.cpp -I./src/*.hpp  -lraylib -std=c++17
-	./a.out	
+	./a.out

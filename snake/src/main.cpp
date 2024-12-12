@@ -15,7 +15,10 @@ const char* TITLE_WON = "WOW!! You won!!";
 const char* INSTRUCTIONS_MENU = "Press SPACE to play";
 const char* INSTRUCTIONS_LOST = "Press SPACE to play again";
 const char* INSTRUCTIONS_WON = "Why would you keep playing?";
-const int INSTRUCTIONS_FONT_SIZE = 22;
+const int INSTRUCTIONS_FONT_SIZE = 26;
+
+const int WINDOW_WIDTH = 640;
+const int WINDOW_HEIGHT = 480;
 
 /////////////////////// Useful Enums //////////////////////
 enum Scene {
@@ -82,6 +85,7 @@ typedef struct State {
     Position snake_head;
     Position snake_tail;
     Shader shader;
+    RenderTexture2D renderTexture;
     CellType grid[GRID_SIZE * GRID_SIZE];
 } State;
 
@@ -247,9 +251,6 @@ void update(State& state) {
 
 /////////////////////// Render Logic  ///////////////////////
 void render_menu(const State& state) {
-    const float W = (float) GetScreenWidth();
-    const float H = (float) GetScreenHeight();
-
     const char* title;
     const char* instructions;
 
@@ -276,8 +277,8 @@ void render_menu(const State& state) {
 
     DrawText(
         title,
-        (W - titleDimensions.x) / 2,
-        (H - titleDimensions.y) * 0.1f,
+        (WINDOW_WIDTH - titleDimensions.x) / 2,
+        (WINDOW_HEIGHT - titleDimensions.y) * 0.1f,
         TITLE_FONT_SIZE,
         RAYWHITE
     );
@@ -285,8 +286,8 @@ void render_menu(const State& state) {
     if (state.show_instructions) {
         DrawText(
             instructions,
-            (W - instructionDimensions.x) / 2,
-            (H - instructionDimensions.y) / 2,
+            (WINDOW_WIDTH - instructionDimensions.x) / 2,
+            (WINDOW_HEIGHT - instructionDimensions.y) / 2,
             INSTRUCTIONS_FONT_SIZE,
             RAYWHITE
         );
@@ -294,22 +295,10 @@ void render_menu(const State& state) {
 }
 
 void render_game(const State& state) {
-    const float W = (float) GetScreenWidth();
-    const float H = (float) GetScreenHeight();
+    const float grid_length = 0.8f * WINDOW_HEIGHT;
 
-    const float min = std::min(H, W);
-    const float grid_length = 0.8f* min;
-
-    float startX;
-    float startY;
-
-    if (H > W) {
-        startX = 0.1f*min;
-        startY = (H - grid_length) / 2;
-    } else {
-        startY = 0.1f*min;
-        startX = (W - grid_length) / 2;
-    }
+    float startX = (WINDOW_WIDTH - grid_length) / 2;
+    float startY =  0.1f*WINDOW_HEIGHT;
 
     const float cell_dimension = grid_length / GRID_SIZE;
 
@@ -337,15 +326,13 @@ void render_game(const State& state) {
     }
 
     // draw border
-    DrawRectangleLines(startX, startY, grid_length, grid_length, RED);
+    DrawRectangleLinesEx((Rectangle){startX, startY, grid_length, grid_length}, 2, RED);
 }
 
 void render(const State& state) {
+    // render to texture
+    BeginTextureMode(state.renderTexture);
     ClearBackground(BLACK);
-    RenderTexture2D renderTexture;
-    renderTexture.texture.width = GetScreenWidth();
-    renderTexture.texture.height = GetScreenHeight();
-    BeginTextureMode(renderTexture);
 
     switch(state.current_scene) {
         case Scene::MENU:
@@ -364,8 +351,36 @@ void render(const State& state) {
     }
 
     EndTextureMode();
+
+    // get scale
+    const float screenWidth = GetScreenWidth();
+    const float screenHeight = GetScreenHeight();
+    const float scale = std::min(screenWidth/WINDOW_WIDTH, screenHeight/WINDOW_HEIGHT);
+
+    // draw texture scaled to current window size
     BeginShaderMode(state.shader);
-    DrawTexture(renderTexture.texture, 0, 0, WHITE);
+    BeginDrawing();
+        ClearBackground(BLACK);
+        DrawTexturePro(
+            state.renderTexture.texture,
+            (Rectangle) {
+                0,
+                0,
+                (float) WINDOW_WIDTH,
+                -(float) WINDOW_HEIGHT
+            },
+            (Rectangle) {
+                (GetScreenWidth() - ((float)WINDOW_WIDTH*scale))*0.5f,
+                (GetScreenHeight() - ((float)WINDOW_HEIGHT*scale))*0.5f,
+                (float) WINDOW_WIDTH * scale,
+                (float) WINDOW_HEIGHT * scale
+            },
+            (Vector2){ 0, 0 },
+            0.0f,
+            WHITE
+        );
+
+    EndDrawing();
     EndShaderMode();
 }
 
@@ -386,7 +401,7 @@ void render(const State& state) {
 
 int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(1080, 720, "CFB: Snake");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CFB: Snake");
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
 
@@ -394,6 +409,7 @@ int main() {
     init_state(state);
 
     state.shader = LoadShader(0, "resources/crt.fs");
+    state.renderTexture = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop_arg(wasm_step, &state, 0, 1);
@@ -405,14 +421,12 @@ int main() {
         }
 
         update(state);
-
-        BeginDrawing();
         render(state);
-        EndDrawing();
     }
 #endif
 
     UnloadShader(state.shader);
+    UnloadRenderTexture(state.renderTexture);
     CloseWindow();
     return 0;
 }

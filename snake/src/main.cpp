@@ -3,6 +3,12 @@
 #include "cstdio"
 #include "raylib.h"
 
+#if __APPLE__
+    #define GLSL_VERSION            330
+#else   // PLATFORM_ANDROID, PLATFORM_WEB
+    #define GLSL_VERSION            100
+#endif
+
 #define GRID_SIZE 16
 #define GRID_LENGTH GRID_SIZE*GRID_SIZE
 #define SNAKE_MOVE_TIME 0.2
@@ -358,7 +364,7 @@ void render(const State& state) {
     const float scale = std::min(screenWidth/WINDOW_WIDTH, screenHeight/WINDOW_HEIGHT);
 
     // draw texture scaled to current window size
-    BeginShaderMode(state.shader);
+    // BeginShaderMode(state.shader);
     BeginDrawing();
         ClearBackground(BLACK);
         DrawTexturePro(
@@ -381,7 +387,7 @@ void render(const State& state) {
         );
 
     EndDrawing();
-    EndShaderMode();
+    // EndShaderMode();
 }
 
 /////////////////////// WASM or Desktop Logic  ///////////////////////
@@ -408,7 +414,8 @@ int main() {
     State state;
     init_state(state);
 
-    state.shader = LoadShader(0, "resources/crt.fs");
+    printf("version: %d\n", GLSL_VERSION);
+    state.shader = LoadShader(0, TextFormat("resources/%i/crt.fs", GLSL_VERSION));
     state.renderTexture = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 #ifdef EMSCRIPTEN
